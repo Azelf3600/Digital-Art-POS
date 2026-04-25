@@ -1,6 +1,5 @@
 <?php
 // includes/navbar.php
-// Require session at top of every page that includes this
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -22,11 +21,13 @@ $current = basename($_SERVER['PHP_SELF']);
             <?php if (isset($_SESSION['user_id'])): ?>
                 <a href="favorites.php" class="navbar__icon" title="Favorites">♡</a>
                 <a href="cart.php"      class="navbar__icon" title="Cart">◻</a>
-                <a href="dashboard.php" class="btn btn--primary" style="padding: 0.5rem 1.25rem; font-size: 0.78rem;">Dashboard</a>
+                <a href="dashboard.php" class="btn btn--primary" style="padding:0.5rem 1.25rem;font-size:0.78rem;">Dashboard</a>
+                <a href="logout.php"    class="btn btn--ghost"   style="padding:0.5rem 1.25rem;font-size:0.78rem;">Logout</a>
             <?php else: ?>
-                <a href="login.php"    class="btn btn--ghost"   style="padding: 0.5rem 1.25rem; font-size: 0.78rem;">Login</a>
-                <a href="register.php" class="btn btn--primary" style="padding: 0.5rem 1.25rem; font-size: 0.78rem;">Sign Up</a>
+                <a href="login.php"    class="btn btn--ghost"   style="padding:0.5rem 1.25rem;font-size:0.78rem;">Login</a>
+                <a href="register.php" class="btn btn--primary" style="padding:0.5rem 1.25rem;font-size:0.78rem;">Sign Up</a>
             <?php endif; ?>
         </div>
+
     </div>
 </nav>

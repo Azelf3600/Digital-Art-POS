@@ -1,0 +1,359 @@
+/* ============================================
+   auth.css — Login & Register Styles
+   public_html/assets/css/auth.css
+   Centered card layout, no side panel
+   ============================================ */
+
+/* ── Base ── */
+.auth-body {
+    min-height: 100vh;
+    background: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+
+/* ── Background ── */
+.auth-bg {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.auth-bg__orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+}
+
+.auth-bg__orb--1 {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(201,169,110,0.1) 0%, transparent 70%);
+    top: -150px; left: 50%;
+    transform: translateX(-50%);
+}
+
+.auth-bg__orb--2 {
+    width: 350px; height: 350px;
+    background: radial-gradient(circle, rgba(100,60,180,0.08) 0%, transparent 70%);
+    bottom: -100px; right: 10%;
+}
+
+.auth-bg__grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: 50px 50px;
+}
+
+/* ── Back Link ── */
+.auth-back {
+    position: fixed;
+    top: 1.5rem;
+    left: 1.5rem;
+    z-index: 100;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    transition: var(--transition);
+}
+.auth-back:hover { color: var(--gold); }
+
+/* ── Centered Container ── */
+.auth-center {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ── Card ── */
+.auth-card {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: 3rem 2.5rem;
+    width: 100%;
+    max-width: 480px;
+    animation: fade-up 0.5s ease both;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.4);
+}
+
+.auth-card__logo {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+.auth-card__logo span { color: var(--gold); }
+
+/* ── Form Header ── */
+.auth-form__header {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.auth-form__title {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--text);
+    margin-bottom: 0.4rem;
+}
+
+.auth-form__sub {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+}
+.auth-form__sub a {
+    color: var(--gold);
+    transition: var(--transition);
+}
+.auth-form__sub a:hover { opacity: 0.7; }
+
+/* ── Form ── */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+}
+
+.form-row--two {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+/* Label row with forgot password link */
+.form-label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.form-forgot {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--gold);
+    transition: var(--transition);
+}
+.form-forgot:hover { opacity: 0.7; }
+
+.form-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+}
+
+.required { color: var(--gold); }
+
+.form-input-wrap { position: relative; }
+
+.form-input {
+    width: 100%;
+    background: var(--ink);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.8rem 1rem;
+    color: var(--text);
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    transition: var(--transition);
+    outline: none;
+}
+
+.form-input::placeholder {
+    color: var(--text-dim);
+    font-size: 0.85rem;
+}
+
+.form-input:focus {
+    border-color: var(--gold);
+    background: rgba(201,169,110,0.04);
+    box-shadow: 0 0 0 3px rgba(201,169,110,0.1);
+}
+
+.form-eye {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    padding: 0;
+    transition: var(--transition);
+}
+.form-eye:hover { color: var(--gold); }
+
+/* ── Password Strength ── */
+.password-strength {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: -0.4rem;
+}
+
+.password-strength__bar {
+    flex: 1;
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.password-strength__fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 2px;
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.password-strength__label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    min-width: 40px;
+}
+
+/* ── Checkbox ── */
+.form-group--check { margin-top: 0.25rem; }
+
+.form-check {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: var(--text-soft);
+    line-height: 1.5;
+}
+
+.form-check input[type="checkbox"] { display: none; }
+
+.form-check__box {
+    width: 18px; height: 18px;
+    border: 1px solid var(--border-mid);
+    border-radius: 4px;
+    background: var(--ink);
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.form-check input:checked + .form-check__box {
+    background: var(--gold);
+    border-color: var(--gold);
+}
+
+.form-check input:checked + .form-check__box::after {
+    content: '✓';
+    color: var(--ink);
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+.form-check a { color: var(--gold); }
+
+/* ── Buttons ── */
+.btn--full {
+    width: 100%;
+    justify-content: center;
+    padding: 0.875rem;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* ── Divider ── */
+.auth-divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: var(--text-dim);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin: 0.25rem 0;
+}
+.auth-divider::before,
+.auth-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+}
+
+/* ── Flash Messages ── */
+.flash {
+    padding: 0.875rem 1rem;
+    border-radius: var(--radius);
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+    font-family: var(--font-mono);
+    letter-spacing: 0.03em;
+    text-align: center;
+}
+
+.flash--success {
+    background: rgba(34,197,94,0.1);
+    border: 1px solid rgba(34,197,94,0.3);
+    color: #4ade80;
+}
+
+.flash--error {
+    background: rgba(239,68,68,0.1);
+    border: 1px solid rgba(239,68,68,0.3);
+    color: #f87171;
+}
+
+.flash--warning {
+    background: rgba(234,179,8,0.1);
+    border: 1px solid rgba(234,179,8,0.3);
+    color: #facc15;
+}
+
+.flash--info {
+    background: rgba(59,130,246,0.1);
+    border: 1px solid rgba(59,130,246,0.3);
+    color: #60a5fa;
+}
+
+/* ── Responsive ── */
+@media (max-width: 520px) {
+    .auth-card {
+        padding: 2rem 1.5rem;
+        border-radius: var(--radius-lg);
+    }
+    .form-row--two {
+        grid-template-columns: 1fr;
+    }
+}
