@@ -4,17 +4,35 @@
 // Starflow — Site Configuration
 // ============================================
 
+// Load secrets from env.php (outside public_html, not in git)
+$env_path = dirname(__DIR__, 2) . '/env.php';
+if (file_exists($env_path)) {
+    require_once $env_path;
+} else {
+    // If env.php not found, define empty fallbacks
+    define('SMTP_PASSWORD', '');
+    define('DB_PASS',       '');
+    define('PAYPAL_SECRET', '');
+}
+
 // ── Site Info ──
 define('SITE_NAME',     'Starflow');
 define('SITE_TAGLINE',  'Starflow Digital Art Shop');
-define('SITE_URL', 'http://localhost/digitalartpos/Digital-Art-POS/public_html');
+
+$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+$host     = $_SERVER['HTTP_HOST'] ?? 'localhost';
+$script   = $_SERVER['SCRIPT_NAME'] ?? '';
+// Find public_html in the path
+$pos      = strpos($script, '/public_html');
+$base     = ($pos !== false) ? substr($script, 0, $pos + strlen('/public_html')) : '';
+define('SITE_URL', $protocol . '://' . $host . $base);
+
 define('SITE_EMAIL',    'admin@starflow.com');
 
 // ── Database ──
 define('DB_HOST',       'localhost:3307');
 define('DB_NAME',       'starflow');
 define('DB_USER',       'root');        // default XAMPP username
-define('DB_PASS',       '');           // default XAMPP password is empty
 define('DB_CHARSET',    'utf8mb4');
 
 // ── File Paths ──
@@ -55,7 +73,6 @@ if (DEV_MODE) {
 // ── PayPal ──
 define('PAYPAL_MODE',       'sandbox');  // Change to 'live' when deploying
 define('PAYPAL_CLIENT_ID',  'YOUR_PAYPAL_CLIENT_ID_HERE');
-define('PAYPAL_SECRET',     'YOUR_PAYPAL_SECRET_HERE');
 
 // ── Order Settings ──
 define('ORDER_PREFIX', 'SF');   // Order numbers will be SF-000001

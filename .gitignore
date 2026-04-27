@@ -1,0 +1,4 @@
+env.php
+/logs/
+*.log
+/private_uploads/

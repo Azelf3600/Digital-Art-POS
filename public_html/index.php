@@ -99,37 +99,37 @@
                     'file'  => 'CrrptManipVsDax.png',
                     'title' => 'CrrptManip Vs Dax',
                     'cat'   => 'Character Art',
-                    'price' => '₱2,000',
+                    'price' => '$10.00',
                 ],
                 [
                     'file'  => 'DinoHeadShot.png',
                     'title' => 'Dino Headshot',
                     'cat'   => 'Portrait',
-                    'price' => '₱1,500',
+                    'price' => '$10.00',
                 ],
                 [
                     'file'  => 'Fusion vs Tinian.png',
                     'title' => 'Fusion vs Tinian',
                     'cat'   => 'Character Art',
-                    'price' => '₱2,200',
+                    'price' => '$25.00',
                 ],
                 [
                     'file'  => 'JouseHaavok.png',
                     'title' => 'Jouse Haavok',
                     'cat'   => 'Portrait',
-                    'price' => '₱1,800',
+                    'price' => '$25.00',
                 ],
                 [
                     'file'  => 'Shadow cat enhanced.png',
                     'title' => 'Shadow Cat',
                     'cat'   => 'Fan Art',
-                    'price' => '₱2,500',
+                    'price' => '$40.00',
                 ],
                 [
                     'file'  => 'YzalHeadShot.png',
                     'title' => 'Yzal Headshot',
                     'cat'   => 'Portrait',
-                    'price' => '₱1,500',
+                    'price' => '$10.00',
                 ],
             ];
             ?>

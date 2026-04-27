@@ -73,7 +73,7 @@ function json_response(array $data, int $status = 200): void {
  * Usage: echo format_price(1800.00);  // ₱1,800.00
  */
 function format_price(float $amount): string {
-    return '₱' . number_format($amount, 2);
+    return '$' . number_format($amount, 2);
 }
 
 /**

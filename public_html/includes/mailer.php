@@ -23,7 +23,7 @@ use PHPMailer\PHPMailer\Exception;
 define('MAIL_HOST',     'smtp-relay.brevo.com');
 define('MAIL_PORT',     587);
 define('MAIL_USERNAME', 'a920e2001@smtp-brevo.com');
-define('MAIL_PASSWORD', 'xsmtpsib-744ea9d1f7f86215ed8feb75c336b55181379b49dd22088e158fc71d93c7acff-Tt0SkL8vu5qFquqw');
+define('MAIL_PASSWORD', SMTP_PASSWORD);
 define('MAIL_FROM',     'starloomdevs@gmail.com');
 define('MAIL_FROM_NAME', 'Starflow');
 
