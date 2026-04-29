@@ -21,7 +21,7 @@ $style          = clean($_POST['style']           ?? '');
 $description    = clean($_POST['description']     ?? '');
 $customer_notes = clean($_POST['customer_notes']  ?? '');
 
-// Validate
+// ── Validate all fields and collect ALL errors ──
 $errors = [];
 
 if (empty($title)) {
@@ -29,20 +29,32 @@ if (empty($title)) {
 }
 
 if (!in_array($tier, ['sketch', 'full_color', 'illustrated'])) {
-    $errors[] = 'Please select a commission tier.';
+    $errors[] = 'Please select a commission tier (Sketch, Full Color, or Illustrated).';
 }
 
-if (empty($description) || strlen($description) < 10) {
-    $errors[] = 'Please provide a description of at least 10 characters.';
+if (empty($description)) {
+    $errors[] = 'Description is required. Tell us about your commission.';
+} elseif (strlen($description) < 10) {
+    $errors[] = 'Description is too short. Please provide at least 10 characters.';
 }
 
+// If any errors, store them all and redirect back
 if (!empty($errors)) {
-    set_flash('error', $errors[0]);
+    // Store all errors as a list
+    $_SESSION['commission_errors'] = $errors;
+    // Store form data so fields stay filled
+    $_SESSION['commission_old'] = [
+        'title'          => $title,
+        'tier'           => $tier,
+        'style'          => $style,
+        'description'    => $description,
+        'customer_notes' => $customer_notes,
+    ];
     header('Location: ../commission.php');
     exit();
 }
 
-// Insert into commissions table
+// ── Insert commission ──
 try {
     $stmt = $pdo->prepare(
         "INSERT INTO commissions
@@ -60,18 +72,26 @@ try {
     $commission_id = (int) $pdo->lastInsertId();
 
 } catch (PDOException $e) {
-    set_flash('error', 'Something went wrong. Please try again.');
+    $_SESSION['commission_errors'] = ['Something went wrong saving your commission. Please try again.'];
     header('Location: ../commission.php');
     exit();
 }
 
-// Handle reference image uploads
+// ── Handle reference image uploads ──
 if (!empty($_FILES['references']['name'][0])) {
     $files     = $_FILES['references'];
     $count     = count($files['name']);
     $max_files = 5;
 
+    // Make sure the upload directory exists
+    if (!is_dir(UPLOAD_REFERENCES)) {
+        mkdir(UPLOAD_REFERENCES, 0755, true);
+    }
+
     for ($i = 0; $i < min($count, $max_files); $i++) {
+        // Skip empty slots
+        if (empty($files['name'][$i])) continue;
+
         $file = [
             'name'     => $files['name'][$i],
             'type'     => $files['type'][$i],
@@ -85,9 +105,11 @@ if (!empty($_FILES['references']['name'][0])) {
         $valid = validate_image($file);
         if ($valid !== true) continue;
 
-        $filename = save_upload($file, UPLOAD_REFERENCES);
+        $ext      = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        $filename = 'ref_' . $commission_id . '_' . uniqid() . '.' . $ext;
+        $target   = rtrim(UPLOAD_REFERENCES, '/') . '/' . $filename;
 
-        if ($filename) {
+        if (move_uploaded_file($file['tmp_name'], $target)) {
             $pdo->prepare(
                 "INSERT INTO commission_references
                     (commission_id, file_path, original_name)
@@ -97,7 +119,7 @@ if (!empty($_FILES['references']['name'][0])) {
     }
 }
 
-// Create notification
+// ── Create notification ──
 create_notification(
     $pdo,
     $user_id,
@@ -107,6 +129,6 @@ create_notification(
     'dashboard.php'
 );
 
-// Success — redirect back with overlay flag
+// ── Success ──
 header('Location: ../commission.php?submitted=1');
 exit();

@@ -532,3 +532,66 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* Validation error box */
+.commission-errors {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.875rem;
+    background: rgba(239,68,68,0.08);
+    border: 1px solid rgba(239,68,68,0.3);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.commission-errors__icon {
+    color: #f87171;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.commission-errors__title {
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #f87171;
+    margin-bottom: 0.5rem;
+}
+
+.commission-errors__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.commission-errors__list li {
+    font-size: 0.85rem;
+    color: #fca5a5;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.4rem;
+}
+
+.commission-errors__list li::before {
+    content: '·';
+    color: #f87171;
+    flex-shrink: 0;
+}
+
+/* Error state for inputs */
+.form-input--error {
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 0 3px rgba(239,68,68,0.1) !important;
+}
+
+/* Inline field error */
+.form-field-error {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: #f87171;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+}

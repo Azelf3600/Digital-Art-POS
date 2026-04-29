@@ -72,7 +72,7 @@ if (DEV_MODE) {
 
 // ── PayPal ──
 define('PAYPAL_MODE',       'sandbox');  // Change to 'live' when deploying
-define('PAYPAL_CLIENT_ID',  'YOUR_PAYPAL_CLIENT_ID_HERE');
+define('PAYPAL_CLIENT_ID',  'AQedMaHXM3uItP7sm23vfzOc9Ym-YlID4-hUGBpWVIMqn65P5BuoAxV_WNY9CRAdfZWsXF5SdSgCusic');
 
 // ── Order Settings ──
 define('ORDER_PREFIX', 'SF');   // Order numbers will be SF-000001

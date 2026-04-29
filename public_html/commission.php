@@ -5,8 +5,12 @@ require_once 'config/session.php';
 require_once 'config/db.php';
 require_once 'includes/functions.php';
 
-// Check if just submitted successfully
 $submitted = isset($_GET['submitted']) && $_GET['submitted'] === '1';
+
+// Pull validation errors and old input from session
+$errors = $_SESSION['commission_errors'] ?? [];
+$old    = $_SESSION['commission_old']    ?? [];
+unset($_SESSION['commission_errors'], $_SESSION['commission_old']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -68,6 +72,21 @@ $submitted = isset($_GET['submitted']) && $_GET['submitted'] === '1';
 
                     <?php show_flash(); ?>
 
+                    <!-- Validation errors -->
+                    <?php if (!empty($errors)): ?>
+                    <div class="commission-errors">
+                        <div class="commission-errors__icon">⚠</div>
+                        <div>
+                            <div class="commission-errors__title">Please fix the following:</div>
+                            <ul class="commission-errors__list">
+                                <?php foreach ($errors as $err): ?>
+                                <li><?= clean($err) ?></li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                    </div>
+                    <?php endif; ?>
+
                     <?php if (!is_logged_in()): ?>
                     <div class="commission-login-notice">
                         <p>You need to be logged in to submit a commission.</p>
@@ -97,8 +116,9 @@ $submitted = isset($_GET['submitted']) && $_GET['submitted'] === '1';
                                 type="text"
                                 id="title"
                                 name="title"
-                                class="form-input"
+                                class="form-input <?= in_array('Commission title is required.', $errors) ? 'form-input--error' : '' ?>"
                                 placeholder="e.g. Fantasy character portrait of my OC"
+                                value="<?= htmlspecialchars($old['title'] ?? '') ?>"
                                 required
                                 maxlength="150"
                             >
@@ -109,59 +129,56 @@ $submitted = isset($_GET['submitted']) && $_GET['submitted'] === '1';
                             <label class="form-label">
                                 Commission Tier <span class="required">*</span>
                             </label>
+                            <?php if (in_array('Please select a commission tier (Sketch, Full Color, or Illustrated).', $errors)): ?>
+                            <div class="form-field-error">Please select a tier below.</div>
+                            <?php endif; ?>
                             <div class="tier-cards" id="tier-cards">
+                                <?php
+                                $tiers = [
+                                    'sketch'      => ['name' => 'Sketch',     'price' => '$10',  'features' => ['Pencil / lineart', 'Single character', '1 revision']],
+                                    'full_color'  => ['name' => 'Full Color', 'price' => '$25',  'features' => ['Full color + shading', 'Up to 2 characters', '2 revisions'], 'popular' => true],
+                                    'illustrated' => ['name' => 'Illustrated','price' => '$40',  'features' => ['Full scene + background', 'Multiple characters', '3 revisions']],
+                                ];
+                                foreach ($tiers as $val => $tier):
+                                ?>
                                 <label class="tier-card">
-                                    <input type="radio" name="tier" value="sketch" required>
+                                    <input
+                                        type="radio"
+                                        name="tier"
+                                        value="<?= $val ?>"
+                                        <?= ($old['tier'] ?? '') === $val ? 'checked' : '' ?>
+                                        required
+                                    >
                                     <div class="tier-card__inner">
-                                        <div class="tier-card__name">Sketch</div>
-                                        <div class="tier-card__price">$10</div>
-                                        <ul class="tier-card__list">
-                                            <li>Pencil / lineart</li>
-                                            <li>Single character</li>
-                                            <li>1 revision</li>
-                                        </ul>
-                                    </div>
-                                </label>
-                                <label class="tier-card">
-                                    <input type="radio" name="tier" value="full_color" required>
-                                    <div class="tier-card__inner">
+                                        <?php if (!empty($tier['popular'])): ?>
                                         <div class="tier-card__badge">Popular</div>
-                                        <div class="tier-card__name">Full Color</div>
-                                        <div class="tier-card__price">$25</div>
+                                        <?php endif; ?>
+                                        <div class="tier-card__name"><?= $tier['name'] ?></div>
+                                        <div class="tier-card__price"><?= $tier['price'] ?></div>
                                         <ul class="tier-card__list">
-                                            <li>Full color + shading</li>
-                                            <li>Up to 2 characters</li>
-                                            <li>2 revisions</li>
+                                            <?php foreach ($tier['features'] as $f): ?>
+                                            <li><?= $f ?></li>
+                                            <?php endforeach; ?>
                                         </ul>
                                     </div>
                                 </label>
-                                <label class="tier-card">
-                                    <input type="radio" name="tier" value="illustrated" required>
-                                    <div class="tier-card__inner">
-                                        <div class="tier-card__name">Illustrated</div>
-                                        <div class="tier-card__price">$40</div>
-                                        <ul class="tier-card__list">
-                                            <li>Full scene + background</li>
-                                            <li>Multiple characters</li>
-                                            <li>3 revisions</li>
-                                        </ul>
-                                    </div>
-                                </label>
+                                <?php endforeach; ?>
                             </div>
                         </div>
 
-                        <!-- Style — matches gallery dropdown style -->
+                        <!-- Style -->
                         <div class="form-group">
                             <label class="form-label" for="style">Preferred Style</label>
                             <select name="style" id="style" class="gallery-select" style="width:100%;">
                                 <option value="">— Select a style —</option>
-                                <option value="Anime / Manga">Anime / Manga</option>
-                                <option value="Semi-Realistic">Semi-Realistic</option>
-                                <option value="Chibi">Chibi</option>
-                                <option value="Western Cartoon">Western Cartoon</option>
-                                <option value="Painterly">Painterly</option>
-                                <option value="Pixel Art">Pixel Art</option>
-                                <option value="Artist's Choice">Artist's Choice</option>
+                                <?php
+                                $styles = ['Anime / Manga','Semi-Realistic','Chibi','Western Cartoon','Painterly','Pixel Art',"Artist's Choice"];
+                                foreach ($styles as $s):
+                                ?>
+                                <option value="<?= $s ?>" <?= ($old['style'] ?? '') === $s ? 'selected' : '' ?>>
+                                    <?= $s ?>
+                                </option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
 
@@ -173,22 +190,20 @@ $submitted = isset($_GET['submitted']) && $_GET['submitted'] === '1';
                             <textarea
                                 id="description"
                                 name="description"
-                                class="form-input form-textarea"
+                                class="form-input form-textarea <?= !empty($errors) && empty($old['description']) ? 'form-input--error' : '' ?>"
                                 placeholder="Describe your character, scene, mood, colors, pose, expressions, etc. The more detail, the better!"
                                 rows="6"
                                 required
                                 maxlength="2000"
-                            ></textarea>
+                            ><?= htmlspecialchars($old['description'] ?? '') ?></textarea>
                             <div class="form-char-count">
-                                <span id="desc-count">0</span> / 2000
+                                <span id="desc-count"><?= strlen($old['description'] ?? '') ?></span> / 2000
                             </div>
                         </div>
 
                         <!-- Notes -->
                         <div class="form-group">
-                            <label class="form-label" for="customer_notes">
-                                Additional Notes
-                            </label>
+                            <label class="form-label" for="customer_notes">Additional Notes</label>
                             <textarea
                                 id="customer_notes"
                                 name="customer_notes"
@@ -196,7 +211,7 @@ $submitted = isset($_GET['submitted']) && $_GET['submitted'] === '1';
                                 placeholder="Deadlines, budget concerns, anything else we should know..."
                                 rows="3"
                                 maxlength="1000"
-                            ></textarea>
+                            ><?= htmlspecialchars($old['customer_notes'] ?? '') ?></textarea>
                         </div>
 
                         <!-- Reference Images -->
@@ -269,36 +284,18 @@ $submitted = isset($_GET['submitted']) && $_GET['submitted'] === '1';
                     <div class="commission-info-card">
                         <h3 class="commission-info-card__title">Pricing</h3>
                         <div class="commission-turnaround">
-                            <div class="turnaround-row">
-                                <span>Sketch</span>
-                                <span>$10</span>
-                            </div>
-                            <div class="turnaround-row">
-                                <span>Full Color</span>
-                                <span>$25</span>
-                            </div>
-                            <div class="turnaround-row">
-                                <span>Illustrated</span>
-                                <span>$40</span>
-                            </div>
+                            <div class="turnaround-row"><span>Sketch</span><span>$10</span></div>
+                            <div class="turnaround-row"><span>Full Color</span><span>$25</span></div>
+                            <div class="turnaround-row"><span>Illustrated</span><span>$40</span></div>
                         </div>
                     </div>
 
                     <div class="commission-info-card">
                         <h3 class="commission-info-card__title">Turnaround Times</h3>
                         <div class="commission-turnaround">
-                            <div class="turnaround-row">
-                                <span>Sketch</span>
-                                <span>3–5 days</span>
-                            </div>
-                            <div class="turnaround-row">
-                                <span>Full Color</span>
-                                <span>7–10 days</span>
-                            </div>
-                            <div class="turnaround-row">
-                                <span>Illustrated</span>
-                                <span>14–21 days</span>
-                            </div>
+                            <div class="turnaround-row"><span>Sketch</span><span>3–5 days</span></div>
+                            <div class="turnaround-row"><span>Full Color</span><span>7–10 days</span></div>
+                            <div class="turnaround-row"><span>Illustrated</span><span>14–21 days</span></div>
                         </div>
                     </div>
 
