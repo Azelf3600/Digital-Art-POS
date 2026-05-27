@@ -23,7 +23,7 @@ function get_logged_in_user(PDO $pdo): array|null {
     if (!is_logged_in()) return null;
 
     $stmt = $pdo->prepare(
-        "SELECT id, username, email, role, full_name, profile_picture, is_active
+        "SELECT id, username, email, role, full_name, profile_picture, is_active,  created_at
          FROM users WHERE id = ? LIMIT 1"
     );
     $stmt->execute([current_user_id()]);
